@@ -15,3 +15,10 @@ class FileSystemOps(object):
     def write_json_to_file(self, file_name, package):
         with open(file_name,'a') as my_file:
             return json.dump(package, my_file)
+    
+    def write_text_to_file(self, file_name, string):
+        with open(file_name,'a') as my_file:
+            return my_file.write(string+"\n")
+    
+    def delete_file(self, file_name):
+        os.remove(file_name)

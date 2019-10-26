@@ -15,7 +15,6 @@ class BlobOps(object):
     fs = filesystem.FileSystemOps()
     def __init__(self, **kwargs):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
-        print(':::::Blob Operations::::')
         self.blob = BlockBlobService(account_name=self.config["azure"]["storage_account"], account_key=self.config["azure"]["storage_account_key"]) 
     
     def create_container(self, container_name):
