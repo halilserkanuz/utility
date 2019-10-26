@@ -11,3 +11,7 @@ class FileSystemOps(object):
     def read_json_from_file(self, file_name):
         with open(file_name,'r') as my_file:
             return json.load(my_file)
+
+    def write_json_to_file(self, file_name, package):
+        with open(file_name,'a') as my_file:
+            return json.dump(package, my_file)

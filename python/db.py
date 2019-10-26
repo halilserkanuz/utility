@@ -10,7 +10,7 @@ class DbOps(object):
     def __init__(self, db="default_db"):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         if self.config[db]["db_type"]=="mysql":
-            self.db_settings = self.config["db"]
+            self.db_settings = self.config[db]
             print("Running on mysql server")
     
     def create_connection(self):

@@ -2,17 +2,17 @@ __name__ = 'RedisOps Class'
 __doc__ = 'Redis Operations'
 __version__ = 'v1.0'
 # Standart Libray
-import json
-import redis
-import time
+from . import filesystem
+import json, redis, time, os
 
 
-class RedisQueue(object):
+class RedisOps(object):
+    fs = filesystem.FileSystemOps()
     """Simple Queue with Redis Backend"""
     def __init__(self, **redis_kwargs):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
-        host = redis_kwargs.get("host", config["redis"]["host"])
-        password = redis_kwargs.get("password", config["redis"]["password"])
+        host = redis_kwargs.get("host", self.config["redis"]["host"])
+        password = redis_kwargs.get("password", self.config["redis"]["password"])
         self.db = redis.Redis(host=host, password=password)
         self.pipe = self.db.pipeline()
 
