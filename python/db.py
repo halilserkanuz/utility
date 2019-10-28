@@ -36,6 +36,7 @@ class DbOps(object):
         
 
     def execute_sp_return_results(self, spname, parameter, parameterCount):
+        print("SP Name: ",spname)
         cnx = self.create_connection()
         cur = cnx.cursor(buffered=True)
         select_statement = "call "+spname+" ("
@@ -46,6 +47,7 @@ class DbOps(object):
                 select_statement = select_statement + "%s,"
         cur.execute(select_statement+")", parameter, multi=True)
         rows = cur.fetchall()
+        
         cur.close()
         cnx.close()
         return rows
@@ -64,7 +66,7 @@ class DbOps(object):
         cnx = self.create_connection()
         cur = cnx.cursor()
         select_statement = sql
-        cur.execute(select_statement, ())
+        cur.execute(select_statement, (), multi=True)
         rows = cur.fetchall()
         cur.close()
         cnx.close()
