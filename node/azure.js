@@ -59,4 +59,25 @@ AzureHelper.prototype.downloadFile = function (container, blobName, localPath) {
 )};
 
 
+AzureHelper.prototype.deleteFile = function (container, blobName) {
+    self = this;
+    return new Promise(async function (resolve, reject) {
+        await self.blobSvc.doesBlobExist(container, blobName, async function(err, result) {
+            if (err) {console.log(err);resolve(null)}
+            else {
+                if (result.exists){
+                    await self.blobSvc.delete_blob(container, blobName, function(err, result){
+                        if(err) reject(err);
+                        resolve(blobName);  
+                    });   
+                } else {
+
+                    resolve(null);
+                }
+            }
+        }
+    )}
+)};
+
+
 module.exports = AzureHelper;
