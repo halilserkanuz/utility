@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, sys, json
 import os.path
+import wget 
 
 
 class FileSystemOps(object):
@@ -22,3 +23,7 @@ class FileSystemOps(object):
     
     def delete_file(self, file_name):
         os.remove(file_name)
+    
+    def download_file(self, file_url):
+        print(file_url)
+        return wget.download(file_url)
