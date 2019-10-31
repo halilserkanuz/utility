@@ -34,11 +34,11 @@ class DbOps(object):
         select_statement = "call "+spname+" ("
         for i in range(parameterCount):
             if i == parameterCount-1:
-                select_statement = select_statement+"'{"+str(i)+"}')"
+                select_statement = select_statement + "'"+parameter[i]+ "')"
             else:
-                select_statement = select_statement + "'{"+str(i)+"}',"
-        select_statement = select_statement.format(parameter)
+                select_statement = select_statement +"'"+parameter[i]+ "',"
         print(select_statement)
+        cur.execute("set names utf8;")
         cur.execute(select_statement)
         
         
