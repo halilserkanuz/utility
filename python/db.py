@@ -28,9 +28,20 @@ class DbOps(object):
             print("Connected to mysql server")
 
     def execute_sp(self, spname, parameter, parameterCount):
+        print("SP Name: ",spname)
         cnx = self.create_connection()
-        cur = cnx.cursor()
-        cur.callproc(spname, (parameter,))
+        cur = cnx.cursor(buffered=True)
+        select_statement = "call "+spname+" ("
+        for i in range(parameterCount):
+            if i == parameterCount-1:
+                select_statement = select_statement + "'"+parameter[i]+ "')"
+            else:
+                select_statement = select_statement +"'"+parameter[i]+ "',"
+        print(select_statement)
+        cur.execute("set names utf8;")
+        cur.execute(select_statement)
+        
+        
         cur.close()
         cnx.close()
         
