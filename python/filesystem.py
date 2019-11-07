@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, sys, json
 import os.path
+import wget 
 
 
 class FileSystemOps(object):
@@ -11,6 +12,10 @@ class FileSystemOps(object):
     def read_json_from_file(self, file_name):
         with open(file_name,'r') as my_file:
             return json.load(my_file)
+    
+    def read_text_from_file(self, file_name):
+        with open(file_name,'r') as my_file:
+            return my_file.read()
 
     def write_json_to_file(self, file_name, package):
         with open(file_name,'a') as my_file:
@@ -22,3 +27,7 @@ class FileSystemOps(object):
     
     def delete_file(self, file_name):
         os.remove(file_name)
+    
+    def download_file(self, file_url):
+        print(file_url)
+        return wget.download(file_url)

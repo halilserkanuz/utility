@@ -38,16 +38,37 @@ AzureHelper.prototype.uploadFile = function (container, blobName, localPath, del
 
 
 
-AzureHelper.prototype.downloadFile = function (container, blobName, localPath) {
+AzureHelper.prototype.downloadFile = function (container, blob, localPath) {
     self = this;
     return new Promise(async function (resolve, reject) {
-        await self.blobSvc.doesBlobExist(container, blobName, async function(err, result) {
+        await self.blobSvc.doesBlobExist(container, blob, async function(err, result) {
             if (err) {console.log(err);resolve(null)}
             else {
                 if (result.exists){
-                    await self.blobSvc.getBlobToLocalFile(container, blobName, localPath, function(err, result){
+                    await self.blobSvc.getBlobToLocalFile(container, blob, localPath, function(err, result){
                         if(err) reject(err);
-                        resolve(blobName);  
+                        resolve(blob);  
+                    });   
+                } else {
+
+                    resolve(null);
+                }
+            }
+        }
+    )}
+)};
+
+
+AzureHelper.prototype.deleteFile = function (container, blob) {
+    self = this;
+    return new Promise(async function (resolve, reject) {
+        await self.blobSvc.doesBlobExist(container, blob, async function(err, result) {
+            if (err) {console.log(err);reject(null);}
+            else {
+                if (result.exists){
+                    await self.blobSvc.deleteBlob(container, blob, function(err, result){
+                        if(err) reject(err);
+                        resolve(blob);  
                     });   
                 } else {
 
