@@ -8,7 +8,10 @@ class ArrayOps(object):
         pass
         
     def split_array(self, array, size):
-        return [array[offs:offs+size] for offs in range(0, len(array), size)]
+        if size>0:
+            return [array[offs:offs+size] for offs in range(0, len(array), size)]
+        # if size is zero it returns array without any partitioning. 
+        return array
 
 class CrawlerOps(object):
 
