@@ -22,7 +22,6 @@ class DbOps(object):
                 passwd=db_settings["password"], 
                 db=db_settings["db_name"],
                 port=db_settings["port"], 
-                charset='utf8',
                 autocommit=True, 
                 connect_timeout=315360)
             print("Connected to mysql server")
@@ -34,11 +33,10 @@ class DbOps(object):
         select_statement = "call "+spname+" ("
         for i in range(parameterCount):
             if i == parameterCount-1:
-                select_statement = select_statement + "'"+parameter[i]+ "')"
+                select_statement = select_statement + "'{0}')".format(parameter[i])
             else:
-                select_statement = select_statement +"'"+parameter[i]+ "',"
-        print(select_statement)
-        cur.execute("set names utf8;")
+                select_statement = select_statement +"'{0}',".format(parameter[i])
+        
         cur.execute(select_statement)
         
         

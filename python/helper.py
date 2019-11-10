@@ -1,5 +1,5 @@
 from . import filesystem
-import random, os
+import random, os,json
 
 class ArrayOps(object):
 
@@ -9,6 +9,24 @@ class ArrayOps(object):
         
     def split_array(self, array, size):
         return [array[offs:offs+size] for offs in range(0, len(array), size)]
+    
+class JsonOps(object):
+
+    def __init__(self):
+        pass
+
+    def clean_item(self, item):
+        if isinstance(item, str):
+            item=item.replace('\n','').replace('\t','').replace('\r','').replace('\'','').replace('"','')
+        elif isinstance(item, dict):
+            for key, value in item.items():
+                item[key]=self.clean_item(value)
+        elif isinstance(item, list):
+            arr = []
+            for i in item:
+                arr.append(self.clean_item(i))
+            item=arr
+        return item
 
 class CrawlerOps(object):
 
