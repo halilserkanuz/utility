@@ -31,10 +31,13 @@ class RedisOps(object):
     def put_many(self, name, items):
         """Put many item into the queue."""
         print('Items adding to queue')
-        for item in items:
-            self.pipe.sadd(name, json.dumps(item))
-        self.pipe.execute()
-        print('adding items to queue finished')
+        if len(items)>0:
+            for item in items:
+                self.pipe.sadd(name, item)
+            self.pipe.execute()
+            print('adding items to queue finished')
+        else:
+            print('List to be loaded is empty')
     
 
     def put(self, name, item):
