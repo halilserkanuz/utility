@@ -30,7 +30,7 @@ class DbOps(object):
     def execute_sp(self, spname, parameter, parameterCount):
         print("SP Name: ",spname)
         cnx = self.create_connection()
-        cur = cnx.cursor(buffered=True)
+        cur = cnx.cursor()
         select_statement = "call "+spname+" ("
         for i in range(parameterCount):
             if i == parameterCount-1:
@@ -48,7 +48,7 @@ class DbOps(object):
     def execute_sp_return_results(self, spname, parameter, parameterCount):
         print("SP Name: ",spname)
         cnx = self.create_connection()
-        cur = cnx.cursor(buffered=True)
+        cur = cnx.cursor()
         select_statement = "call "+spname+" ("
         for i in range(parameterCount):
             if i == parameterCount-1:
