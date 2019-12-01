@@ -1,10 +1,42 @@
 var puppeteer = require('puppeteer');
 var md5 = require('md5');
 const fs = require("mz/fs");
+const md5File = require('md5-file');
+const resemble = require('resemblejs')
 
 function PuppeteerHelper () {
       console.log('[PuppeteerHelper]')
 };
+
+PuppeteerHelper.prototype.getFileHash = (filename)=> {
+    return new Promise(function(resolve, reject) {
+        md5File(filename, (err, hash) => {
+            if (err) reject(err);
+            resolve(hash);
+        });
+    })
+};
+
+
+PuppeteerHelper.prototype.compareImages = (newImage, oldImage) => {
+    return new Promise(async function(resolve, reject){
+        try {
+            const options = {};
+            await resemble.compare(newImage, oldImage, options, function(err, data) {
+                if(err) reject(err)
+                if (data.misMatchPercentage>0.1){
+                    fs.writeFile("diff_"+newImage, data.getBuffer());
+                    resolve("diff_"+newImage);
+                }
+                resolve(null)   
+
+            });
+        }
+        catch(err) {
+            reject(err)
+        }
+    });
+}
 
 PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
     var self = this;
@@ -88,6 +120,7 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         }, selector, order);
                         break;
                     case "ss_by_selector":
+                        
                         console.log(step);
                         var path = customs;
                         var selector = step["selector"];
@@ -95,12 +128,13 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         await page.focus(selector);
                         const rect = await page.evaluate((selector,order) => {
                             const element = document.querySelectorAll(selector)[order];
+                            
                             if (!element)
                                 return null;
                             const {x, y, width, height} = element.getBoundingClientRect();
                                 return {left: x, top: y, width, height, id: element.id, text:element.innerText};
                         }, selector, order);
-                        
+                        console.log(rect)
                         const scroll = await page.evaluate(() => {
                             var left = (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft;
                             var top = (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop == 'number' ? t : document.body).scrollTop;
