@@ -37,6 +37,21 @@ FileOperationHelper.prototype.write_json_to_file = function (file_name, obj) {
 
 };
 
+FileOperationHelper.prototype.append_text_to_file = function (file_name, text) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        try{
+            console.log(text);
+            fs.appendFileSync(file_name, text);
+            resolve(file_name)
+        } catch(err){
+            reject(err);
+        }
+        
+    });
+
+};
+
 FileOperationHelper.prototype.delete_file = function (file_name) {
     var self = this;
     return new Promise(function (resolve, reject) {

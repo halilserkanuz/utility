@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import mysql.connector as pymysql
+import  pymysql
 import os
 from . import filesystem
 import os.path
@@ -22,14 +22,15 @@ class DbOps(object):
                 passwd=db_settings["password"], 
                 db=db_settings["db_name"],
                 port=db_settings["port"], 
-                autocommit=True, 
+                autocommit=True, charset='utf8',
+                use_unicode=True,
                 connect_timeout=315360)
             print("Connected to mysql server")
 
     def execute_sp(self, spname, parameter, parameterCount):
         print("SP Name: ",spname)
         cnx = self.create_connection()
-        cur = cnx.cursor(buffered=True)
+        cur = cnx.cursor()
         select_statement = "call "+spname+" ("
         for i in range(parameterCount):
             if i == parameterCount-1:
@@ -47,14 +48,14 @@ class DbOps(object):
     def execute_sp_return_results(self, spname, parameter, parameterCount):
         print("SP Name: ",spname)
         cnx = self.create_connection()
-        cur = cnx.cursor(buffered=True)
+        cur = cnx.cursor()
         select_statement = "call "+spname+" ("
         for i in range(parameterCount):
             if i == parameterCount-1:
                 select_statement = select_statement+"%s"
             else:
                 select_statement = select_statement + "%s,"
-        cur.execute(select_statement+")", parameter, multi=True)
+        cur.execute(select_statement+")", parameter)
         rows = cur.fetchall()
         
         cur.close()
@@ -76,7 +77,7 @@ class DbOps(object):
         cnx = self.create_connection()
         cur = cnx.cursor()
         select_statement = sql
-        cur.execute(select_statement, (), multi=True)
+        cur.execute(select_statement, ())
         rows = cur.fetchall()
         cur.close()
         cnx.close()
