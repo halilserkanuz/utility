@@ -17,7 +17,9 @@ class JsonOps(object):
 
     def clean_item(self, item):
         if isinstance(item, str):
-            item=item.replace('\n','').replace('\t','').replace('\r','').replace('\'','').replace('"','')
+            item=item.replace('\n','').replace('\t','').replace('\r','').replace('\'','').replace('\'','').replace('"','').replace('"','').replace('\u011f','ğ')\
+                .replace('\u011e','Ğ').replace('\u0131','ı').replace('\u0130','i').replace('\u00f6','ö').replace('\u00d6','Ö')\
+                .replace('\u00fc','ü').replace('\u00dc','Ü').replace('\u015f','ş').replace('\u015e','Ş').replace('\u00e7','ç').replace('\u00c7','Ç')
         elif isinstance(item, dict):
             for key, value in item.items():
                 item[key]=self.clean_item(value)
