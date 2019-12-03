@@ -42,7 +42,7 @@ class Email_AWS(object):
         )
 
 class Email_Sendgrid(object):
-    default_sender = 'Datapare <no-reply@datapare.com>'
+    default_sender = 'Datapare <info@datapare.com>'
     def __init__(self):
         with open(os.path.dirname(__file__) + '/../config.json','r') as my_file:
             self.config = json.load(my_file)
@@ -54,14 +54,30 @@ class Email_Sendgrid(object):
             subject=subject,
             html_content=body)
         try:
-            sg = SendGridAPIClient(self.config["emailing"]["sendgrid_apikey"])
+            sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
             response = sg.send(message)
-            print(response.status_code)
-            print(response.body)
-            print(response.headers)
         except Exception as e:
             print(e.message)
-       
+    
+    def send_with_template(self, subject="Datapare Notification", obj={}):
+        
+        template_name = obj["email_template"]
+        email = obj["email"]
+        
+
+        te = TemplateEngine()
+        body = te.render(template_name, obj)
+
+        message = Mail(
+            from_email='info@datapare.com',
+            to_emails=email,
+            subject=subject,
+            html_content=body)
+        try:
+            sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
+            response = sg.send(message)
+        except Exception as e:
+            print(e.message)
 
 class TemplateEngine(object):
     def __init__(self):
@@ -86,7 +102,7 @@ class TemplateEngine(object):
             
         }
         #data = {**const, **params} # Hata aldım. TypeError: 'list' object is not a mapping
-
+        print(self.TEMPLATES_DIR)
         j2_env = Environment(loader=FileSystemLoader(self.TEMPLATES_DIR), trim_blocks=True)
         j2 = j2_env.get_template(template_name)
 
@@ -102,7 +118,7 @@ class TemplateEngine(object):
                     inner join general_tokens t on t.user_id = u.id
                     where t.id = (select max(id) from general_tokens where token_type=4 and user_id=u.id and is_expired=0) and u.email='{0}'
                   """.format(email)
-            row = MysqlOps().execute_sql_return_results(sql)
+            row = DbOps().execute_sql_return_results(sql)
             if row:
                 token = row[0][0]
 
@@ -113,7 +129,7 @@ class TemplateEngine(object):
                         from general_user
                         where email='{0}'                      
                       """.format(email)
-                user_id = MysqlOps().execute_sql_return_results(sql)[0][0]
+                user_id = DbOps().execute_sql_return_results(sql)[0][0]
                 sql = """
                         insert into general_tokens(token, token_type, created_at, expire_at, is_expired, user_id)
                         values('{0}', 4, now(), now() + interval 10 year, 0, {1})
