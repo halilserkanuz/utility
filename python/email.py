@@ -73,11 +73,10 @@ class Email_Sendgrid(object):
             to_emails=email,
             subject=subject,
             html_content=body)
-        try:
-            sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
-            response = sg.send(message)
-        except Exception as e:
-            print(e)
+        
+        sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
+        response = sg.send(message)
+        
 
 class TemplateEngine(object):
     def __init__(self):
