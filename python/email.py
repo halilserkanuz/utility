@@ -77,7 +77,7 @@ class Email_Sendgrid(object):
             sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
             response = sg.send(message)
         except Exception as e:
-            print(e.message)
+            print(e)
 
 class TemplateEngine(object):
     def __init__(self):
