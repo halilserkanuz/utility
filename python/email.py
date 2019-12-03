@@ -50,11 +50,11 @@ class Email_Sendgrid(object):
     def send(self, receipent, sender,  subject="Datapare Notification", body=""):
         message = Mail(
             from_email='info@datapare.com',
-            to_emails='serkanuz@datapare.com',
+            to_emails=receipent,
             subject=subject,
             html_content=body)
         try:
-            sg = SendGridAPIClient("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")
+            sg = SendGridAPIClient(self.config["emailing"]["sendgrid_apikey"])
             response = sg.send(message)
             print(response.status_code)
             print(response.body)
