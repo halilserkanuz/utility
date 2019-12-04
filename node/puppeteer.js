@@ -28,8 +28,7 @@ PuppeteerHelper.prototype.compareImages = (newImage, oldImage) => {
                     fs.writeFile("diff_"+newImage, data.getBuffer());
                     resolve("diff_"+newImage);
                 }
-                resolve(null)   
-
+                resolve(null)
             });
         }
         catch(err) {
@@ -44,14 +43,14 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
         var result = {};
         for (var j=0; j<steps.length; j++){
             var step = steps[j];
+            console.log(step)
             try{
                 switch(step["type"]){
                     case "waitForSelector":
-                        console.log(step);
                         await page.waitFor(step["selector"]);
+                        
                         break;
                     case "click":
-                        console.log(step);
                         try {
                             var selector = step["selector"];
                             var optionOrder = step["order"];
@@ -65,7 +64,6 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         }
 
                     case "optionSelect":
-                        console.log(step);
                         var selector = step["selector"];
                         var optionOrder = step["order"];
                         await page.evaluate((selector, optionOrder)=>{
@@ -84,7 +82,6 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         page.select(selector, value);
                         break;
                     case "setAttribute":
-                        console.log(step);
                         var selector = step["selector"];
                         var attribute = step["attribute"];
                         var value = step["value"];
@@ -95,24 +92,19 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         },selector, order, attribute, value);
                         break;
                     case "waitFor":
-                        console.log(step);
                         await page.waitFor(step["second"]);
                         break;
                     case "tap":
-                            console.log(step);
                             await page.tap(step["selector"]);
                             break;
                     case "waitForSelector":
-                        console.log(step);
                         await page.waitForSelector(step["selector"], {visible: true});
                         break;
                     
                     case "waitForNavigation":
-                        console.log(step);
                         await page.waitForNavigation({ waitUntil: 'networkidle2' })
                         break;
                     case "hide":
-                        console.log(step);
                         var selector = step["selector"];
                         var order = step["order"];
                         await page.evaluate((selector, order)=>{
@@ -120,8 +112,6 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         }, selector, order);
                         break;
                     case "ss_by_selector":
-                        
-                        console.log(step);
                         var path = customs;
                         var selector = step["selector"];
                         var order = step["order"];
@@ -144,12 +134,10 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         if(!scroll)
                             scroll = {left:0,top:0};
 
-                        console.log(rect);
-                        console.log(scroll);
                         result.filename = customs;
                         result.newTextHash = md5(rect.text);
                         result.ignoreTextHash = false;
-                        var buffer = await page.screenshot({
+                        await page.screenshot({path: customs,
                             clip: {
                                 x: rect.left + scroll.left ,
                                 y: rect.top + scroll.top,
@@ -157,18 +145,15 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                                 height: rect.height
                             }
                         });
-                        await fs.writeFileSync(path, buffer);
                         break;
                     case "ss_by_coordinates":
-                        console.log(step)
-                        var buffer = await page.screenshot({path: customs,
+                        await page.screenshot({path: customs,
                             clip: {x: step["x"], y:step["y"], width: step["w"], height: step["h"]}
                         });
                         result.filename = customs;
                         result.ignoreTextHash = true;
                         break;
                     case "eval":
-                        console.log(step);
                         var script = step["script"];
                         await page.evaluate((script)=>{
                             eval(script);
@@ -176,14 +161,12 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         break;
 
                     case "type":
-                        console.log(step);
                         var typingText = customs.typingText;
                         var inputSelector = step.selector;
                         await page.type(inputSelector, typingText);
                         break;
                     
                     case "multipleResults":
-                        console.log(step);
                         var products= []; 
                         var selector = step["selector"];
 
