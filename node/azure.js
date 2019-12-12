@@ -13,24 +13,21 @@ function AzureHelper () {
 };
 
 
-AzureHelper.prototype.uploadFile = function (container, blobName, localPath, del) {
-    if (del === undefined) {
-        del = false;
-    }
+AzureHelper.prototype.uploadFile = function (container, blobName, localPath) {
+    
     self = this;
     return new Promise(function (resolve, reject) {
+        console.log('promise created')
         self.blobSvc.createBlockBlobFromLocalFile(container, blobName, localPath, (err, result) => {
+            console.log(container, blobName, localPath)
             if(err!==null){
                 console.log('[Azure Helper] --- Failed to upload to BlobService:');
-                reject(err);
+                reject(err, container, blobName, localPath);
             }
-            resolve('[Azure Helper] --- Successfully uploaded to BlobService');
-            if (del == true) {
-                fs.unlinkSync(localPath);
-            } 
-
+            
             
         });
+        resolve('[Azure Helper] --- Successfully uploaded to BlobService');
     })
 
 };
