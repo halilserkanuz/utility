@@ -16,9 +16,9 @@ class Email_AWS(object):
     def __init__(self):
         config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         self.CHARSET = "UTF-8"
-        self.client = boto3.client('ses', aws_access_key_id=config.aws["access_key"],
-                                   aws_secret_access_key=config.aws["secret_key"],
-                                    region_name=config.aws["default_region"])
+        self.client = boto3.client('ses', aws_access_key_id=config["aws"]["access_key"],
+                                   aws_secret_access_key=config["aws"]["secret_key"],
+                                    region_name=config["aws"]["default_region"])
 
 
     def send(self, obj):
