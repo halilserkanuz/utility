@@ -28,7 +28,7 @@ class Email_AWS(object):
         params = obj["items"]
         template_name = obj["email_template"]
         te = TemplateEngine()
-        body = te.render(template_name, params)
+        body = te.render(template_name, obj)
         response = self.client.send_email(
             Destination={
                 'ToAddresses': email.split(',')
