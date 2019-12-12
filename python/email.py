@@ -31,7 +31,7 @@ class Email_AWS(object):
         body = te.render(template_name, params)
         response = self.client.send_email(
             Destination={
-                'ToAddresses': receipent.split(',')
+                'ToAddresses': email.split(',')
             },
             Message={
                 'Body': {
