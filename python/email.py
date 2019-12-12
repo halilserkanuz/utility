@@ -4,27 +4,34 @@ from jinja2 import Environment, FileSystemLoader
 from .db import DbOps
 import uuid
 import smtplib
-import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+import os, boto3
+from . import filesystem
 
 
 
 class Email_AWS(object):
     default_sender = 'Datapare <no-reply@datapare.com>'
     CHARSET = "UTF-8"
+    fs = filesystem.FileSystemOps()
     def __init__(self):
+        config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         self.CHARSET = "UTF-8"
-        self.client = boto3.client('ses', aws_access_key_id=config.AWS_ACCESS_KEY_ID,
-                                   aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
-                                    region_name=config.AWS_DEFAULT_REGION)
+        self.client = boto3.client('ses', aws_access_key_id=config["aws"]["access_key"],
+                                   aws_secret_access_key=config["aws"]["secret_key"],
+                                    region_name=config["aws"]["default_region"])
 
 
-    def send(self, receipent, sender,  subject="Datapare Notification", body=""):
-        
+    def send(self, obj):
+        email = obj["email"]
+        sender = "info@datapare.com"
+        subject="Datapare Notification"
+        params = obj["items"]
+        template_name = obj["email_template"]
+        te = TemplateEngine()
+        body = te.render(template_name, obj)
         response = self.client.send_email(
             Destination={
-                'ToAddresses': receipent.split(',')
+                'ToAddresses': email.split(',')
             },
             Message={
                 'Body': {
@@ -41,42 +48,6 @@ class Email_AWS(object):
             Source=sender,
         )
 
-class Email_Sendgrid(object):
-    default_sender = 'Datapare <info@datapare.com>'
-    def __init__(self):
-        with open(os.path.dirname(__file__) + '/../config.json','r') as my_file:
-            self.config = json.load(my_file)
-
-    def send(self, receipent, sender,  subject="Datapare Notification", body=""):
-        message = Mail(
-            from_email='info@datapare.com',
-            to_emails=receipent,
-            subject=subject,
-            html_content=body)
-        try:
-            sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
-            response = sg.send(message)
-        except Exception as e:
-            print(e.message)
-    
-    def send_with_template(self, subject="Datapare Notification", obj={}):
-        
-        template_name = obj["email_template"]
-        email = obj["email"]
-        
-
-        te = TemplateEngine()
-        body = te.render(template_name, obj)
-
-        message = Mail(
-            from_email='info@datapare.com',
-            to_emails=email,
-            subject=subject,
-            html_content=body)
-        
-        sg = SendGridAPIClient(self.config["email"]["sendgrid_apikey"])
-        response = sg.send(message)
-        
 
 class TemplateEngine(object):
     def __init__(self):

@@ -93,10 +93,10 @@ div[style*="margin: 16px 0;"] { margin: 0 !important; }
                     <tr>
                         <td align="center" valign="top" style="padding: 0 0 25px 0; font-family: Open Sans, Helvetica, Arial, sans-serif;">
                             <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border: #FFE01A solid 10px;">
-                                {% for con in params["content"] %}
+                                {% for con in params["items"] %}
                                 <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 5px; font-size:12px;">
                                     <td style="padding:5px;">
-                                        {{ con.website_name }}
+                                        {{ con.website }}
                                     </td>
                                     <td style="padding:5px;">
                                         <a href="{{ con.link }}" target="_blank">
