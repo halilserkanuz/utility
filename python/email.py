@@ -4,7 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 from .db import DbOps
 import uuid
 import smtplib
-import os
+import os, boto3
 from . import filesystem
 
 
