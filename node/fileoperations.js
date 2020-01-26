@@ -20,6 +20,26 @@ FileOperationHelper.prototype.read_file_to_json = function (file_name) {
 
 };
 
+FileOperationHelper.prototype.read_lines_from_file = function (file_name) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        try{
+            var lineReader = require('readline').createInterface({
+                input: require('fs').createReadStream(file_name)
+              });
+              var lines = []
+              lineReader.on('line', function (line) {
+                lines.push(line);
+              });
+            resolve(lines)
+        } catch(err){
+            reject(err);
+        }
+        
+    });
+
+};
+
 FileOperationHelper.prototype.write_json_to_file = function (file_name, obj) {
     var self = this;
     return new Promise(function (resolve, reject) {
