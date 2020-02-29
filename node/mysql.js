@@ -2,7 +2,7 @@ const mysql = require('mysql');
 
 const config = require('../config.json');
 
-const mySQLConfig = config.mySQL;
+const mySQLConfig = config.default_db;
 
 function MySQLHelper () {
     this.con = mysql.createConnection({
@@ -30,6 +30,21 @@ MySQLHelper.prototype.get = function (query) {
     });
 };
 
+MySQLHelper.prototype.execute_sql = function (query) {
+    var self = this;
+    console.log(query);
+    return new Promise(function (resolve, reject) {
+        self.con.connect(function(err) {
+            if (err) return err;
+            
+            self.con.query(query, function (err, result, fields) {
+                if (err) throw err;
+                self.con.end();
+                resolve(result);
+            });
+          });
+    });
+};
 
 MySQLHelper.prototype.insert = function (query, data) {
     var self = this;
