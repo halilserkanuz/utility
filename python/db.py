@@ -84,7 +84,7 @@ class DbOps(object):
         return rows
 
 
-    def execute_sql_return_json(sql="", returns=()):
+    def execute_sql_return_json(sql, returns):
         cursor = connections['default'].cursor()
         cursor.execute(sql)
         rows = cursor.fetchall()
