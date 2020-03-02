@@ -7,10 +7,10 @@ function RedisHelper () {
     console.log("[RedisHelper] --- Client created ---");
 };
 
-RedisHelper.prototype.pop = function (queue) {
+RedisHelper.prototype.pop = function (queue, count=1) {
     var self = this;
     return new Promise(function (resolve, reject) {
-        self.client.spop(queue, function(err, res){
+        self.client.spop(key=queue, count=count, function(err, res){
             if(err) {
                 console.log("[RedisHelper] --- Error Occured: ---"); //TODO: Logging operation gonna add.
                 reject(err);
