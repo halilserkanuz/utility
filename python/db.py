@@ -85,10 +85,12 @@ class DbOps(object):
 
 
     def execute_sql_return_json(self, sql="", returns=()):
-        cursor = connections['default'].cursor()
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-        cursor.close()
+        cnx = self.create_connection()
+        cur = cnx.cursor()
+
+        cur.execute(sql)
+        rows = cur.fetchall()
+        cur.close()
         results = {"results": []}
         for row in rows:
             i=0
