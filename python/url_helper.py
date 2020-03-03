@@ -1,7 +1,7 @@
 from urllib.parse import urlparse, parse_qs, urldefrag, urljoin
 import tldextract
 import urllib.request, urllib.error
-import re
+import re, hashlib
 
 class URLHelper(object):
 
