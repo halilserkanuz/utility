@@ -5,6 +5,9 @@ import re
 
 class URLHelper(object):
 
+    def __init__(self):
+        pass
+
     def convert(self, url):
         if not url.startswith('http'):
             return 'http://{url}'.format(url=url)
