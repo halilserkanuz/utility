@@ -24,7 +24,8 @@ class URLHelper(object):
             "paths": parsed_url.path,
             "params": parsed_url.params,
             "queries": parsed_url.query,
-            "fragments": parsed_url.fragment
+            "fragments": parsed_url.fragment,
+            "link_hash": self.get_link_hash(url)
         }
         self.__parse_qs()
         self.__parse_domain()
@@ -100,6 +101,12 @@ class URLHelper(object):
         parsed_origin = urllib.parse.urlparse(origin)
         return parsed_canon._replace(netloc=parsed_origin.netloc).geturl()
 
+    def get_link_hash(self, link):
+        if link is not None:
+            link = link.replace("'","").replace('"', '')
+            return hashlib.md5(link.encode("utf-8")).hexdigest()
+        else:
+            return None
 
 
 
