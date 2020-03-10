@@ -19,7 +19,27 @@ class Email_AWS(object):
         self.client = boto3.client('ses', aws_access_key_id=config["aws"]["access_key"],
                                    aws_secret_access_key=config["aws"]["secret_key"],
                                     region_name=config["aws"]["default_region"])
-
+    
+    def send_aws(self, receipent, sender,  subject="Datapare Notification", body=""):
+        
+        response = self.client.send_email(
+            Destination={
+                'ToAddresses': receipent.split(',')
+            },
+            Message={
+                'Body': {
+                    'Html': {
+                        'Charset': self.CHARSET,
+                        'Data': body,
+                    },
+                },
+                'Subject': {
+                    'Charset': self.CHARSET,
+                    'Data': subject,
+                },
+            },
+            Source=sender,
+        )
 
     def send(self, obj):
         email = obj["email"]

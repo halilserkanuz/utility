@@ -84,3 +84,20 @@ class DbOps(object):
         return rows
 
 
+    def execute_sql_return_json(self, sql="", returns=()):
+        cnx = self.create_connection()
+        cur = cnx.cursor()
+
+        cur.execute(sql)
+        rows = cur.fetchall()
+        cur.close()
+        results = {"results": []}
+        for row in rows:
+            i=0
+            res = {}
+            for ret in returns:
+                res[ret]=row[i]
+                i=i+1
+            results.get("results").append(res)
+
+        return results
