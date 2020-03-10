@@ -49,7 +49,10 @@ class RedisOps(object):
         return items
 
     def get(self, name):
-        return self.db.spop(name).decode('utf-8')
+        name = self.db.spop(name)
+        if name:
+            return name.decode('utf-8')
+        return name
 
     def get_oldest_key_like(self, name):
         key_list = self.get_key_list_like(name)
