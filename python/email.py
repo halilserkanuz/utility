@@ -108,7 +108,7 @@ class TemplateEngine(object):
                     inner join general_tokens t on t.user_id = u.id
                     where t.id = (select max(id) from general_tokens where token_type=4 and user_id=u.id and is_expired=0) and u.email='{0}'
                   """.format(email)
-            row = DbOps().execute_sql_return_results(sql)
+            row = DbOps("track_db").execute_sql_return_results(sql)
             if row:
                 token = row[0][0]
 
@@ -119,7 +119,7 @@ class TemplateEngine(object):
                         from general_user
                         where email='{0}'                      
                       """.format(email)
-                user_id = DbOps().execute_sql_return_results(sql)[0][0]
+                user_id = DbOps("track_db").execute_sql_return_results(sql)[0][0]
                 sql = """
                         insert into general_tokens(token, token_type, created_at, expire_at, is_expired, user_id)
                         values('{0}', 4, now(), now() + interval 10 year, 0, {1})
