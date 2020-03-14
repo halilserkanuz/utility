@@ -4,10 +4,11 @@ const config = require('../config.json');
 
 const azureConfig = config.azure;
 
-function AzureHelper () {
+function AzureHelper (storageAccount) {
+
     this.blobSvc = azure.createBlobService(
-        azureConfig.storage_account,
-        azureConfig.storage_account_key
+        config[storageAccount].storage_account,
+        config[storageAccount].storage_account_key
       );
     console.log('[Azure Helper] --- Successfully connected to BlobService ---');
 };
