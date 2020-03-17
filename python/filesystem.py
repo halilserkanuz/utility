@@ -2,7 +2,7 @@
 import os, sys, json
 import os.path
 import wget 
-
+import zipfile
 
 class FileSystemOps(object):
     def __init__(self):
@@ -31,3 +31,7 @@ class FileSystemOps(object):
     def download_file(self, file_url):
         print(file_url)
         return wget.download(file_url)
+    
+    def unzip_file(self, file_name, target="./"):
+        with zipfile.ZipFile(file_name, 'r') as zip_ref:
+            zip_ref.extractall(target)
