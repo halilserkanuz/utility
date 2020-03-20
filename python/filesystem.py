@@ -35,5 +35,9 @@ class FileSystemOps(object):
             return None
     
     def unzip_file(self, file_name, target="./"):
-        with zipfile.ZipFile(file_name, 'r') as zip_ref:
-            zip_ref.extractall(target)
+        try:
+            with zipfile.ZipFile(file_name, 'r') as zip_ref:
+                zip_ref.extractall(target)
+            return file_name
+        except:
+            return None
