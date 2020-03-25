@@ -39,5 +39,6 @@ class FileSystemOps(object):
             with zipfile.ZipFile(file_name, 'r') as zip_ref:
                 zip_ref.extractall(target)
             return file_name
-        except:
+        except Exception as e:
+            print(e)
             return None
