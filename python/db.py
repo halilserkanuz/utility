@@ -63,6 +63,7 @@ class DbOps(object):
         return rows
 
     def execute_sql(self, sql):
+        print(sql)
         cnx = self.create_connection()
         cur = cnx.cursor()
         select_statement = sql
