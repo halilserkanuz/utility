@@ -25,7 +25,8 @@ class URLHelper(object):
             "params": parsed_url.params,
             "queries": parsed_url.query,
             "fragments": parsed_url.fragment,
-            "link_hash": self.get_link_hash(url)
+            "link_hash": self.get_link_hash(url),
+            "clean_url": parsed_url.scheme+"://"+parsed_url.netloc+parsed_url.path+parsed_url.params+parsed_url.query
         }
         self.__parse_qs()
         self.__parse_domain()
