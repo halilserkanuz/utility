@@ -4,10 +4,11 @@ const config = require('../config.json');
 
 const azureConfig = config.azure;
 
-function AzureHelper () {
+function AzureHelper (storageAccount) {
+
     this.blobSvc = azure.createBlobService(
-        azureConfig.storage_account,
-        azureConfig.storage_account_key
+        config[storageAccount].storage_account,
+        config[storageAccount].storage_account_key
       );
     console.log('[Azure Helper] --- Successfully connected to BlobService ---');
 };
@@ -21,7 +22,7 @@ AzureHelper.prototype.uploadFile = function (container, blobName, localPath) {
         self.blobSvc.createBlockBlobFromLocalFile(container, blobName, localPath, (err, result) => {
             console.log(container, blobName, localPath)
             if(err!==null){
-                console.log('[Azure Helper] --- Failed to upload to BlobService:');
+                console.log('[Azure Helper] --- Failed to upload to BlobService:', err);
                 reject(err, container, blobName, localPath);
             }
             
