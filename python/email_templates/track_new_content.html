@@ -92,26 +92,61 @@ div[style*="margin: 16px 0;"] { margin: 0 !important; }
                     </tr>
                     <tr>
                         <td align="center" valign="top" style="padding: 0 0 25px 0; font-family: Open Sans, Helvetica, Arial, sans-serif;">
-                            <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border: #FFE01A solid 10px;">
+                            
                                 {% for con in params["items"] %}
-                                <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 5px; font-size:12px;">
-                                    <td style="padding:5px;">
-                                        {{ con.website }}
-                                    </td>
-                                    <td style="padding:5px;">
-                                        <a href="{{ con.link }}" target="_blank">
-                                            {{ con.title }}
-                                        </a>
-                                    </td>
-                                    <!--
-                                    <td style="padding:5px;">
-                                        {{ con.content_type }}
-                                    </td>
-                                    -->
-                                    
-                                </tr>
+                                <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border: #acacac solid 2px; margin: 3px;">
+                                    <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 2px; font-size:12px;">
+                                        <td style="padding:5px; width: 100px; font-size: 14px; font-weight: bold;">
+                                            Website
+                                        </td>
+                                        <td style="padding:5px;">
+                                            {{ con.website }}
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 2px; font-size:12px;">
+                                        <td style="padding:5px; width: 100px; font-size: 14px; font-weight: bold;">
+                                            Title
+                                        </td> 
+                                        <td style="padding:5px;">
+                                            <a href="{{ con.link }}" target="_blank">
+                                                {{ con.title }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 2px; font-size:12px;">
+                                        <td style="padding:5px; width: 100px; font-size: 14px; font-weight: bold;">
+                                            H1
+                                        </td> 
+                                        <td style="padding:5px;">
+                                            <a href="{{ con.link }}" target="_blank">
+                                                {{ con.h1 }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 2px; font-size:12px;">
+                                        <td style="padding:5px; width: 100px; font-size: 14px; font-weight: bold;">
+                                            H2
+                                        </td> 
+                                        <td style="padding:5px;">
+                                            <a href="{{ con.link }}" target="_blank">
+                                                {{ con.h2 }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr bgcolor="#ffffff" style="border-radius: 0 0 3px 3px; padding: 2px; font-size:12px;">
+                                        <td style="padding:5px; width: 100px; font-size: 14px; font-weight: bold;">
+                                            H3
+                                        </td> 
+                                        <td style="padding:5px;">
+                                            <a href="{{ con.link }}" target="_blank">
+                                                {{ con.h3 }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
                                 {% endfor %}
-                            </table>
+                            
                         </td>
                     </tr>
             </table>
