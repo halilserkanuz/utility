@@ -12,8 +12,10 @@ PuppeteerHelper.prototype.getFileHash = (filename)=> {
     return new Promise(function(resolve, reject) {
         md5File(filename, (err, hash) => {
             if (err) reject(err);
+            console.log(hash);
             resolve(hash);
         });
+        console.log(hash);
     })
 };
 
