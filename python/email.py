@@ -13,7 +13,7 @@ class Email_AWS(object):
     default_sender = 'Datapare <no-reply@datapare.com>'
     CHARSET = "UTF-8"
     fs = filesystem.FileSystemOps()
-    def __init__(self, db=""):
+    def __init__(self, db="default_db"):
         config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         self.CHARSET = "UTF-8"
         self.client = boto3.client('ses', aws_access_key_id=config["aws"]["access_key"],
