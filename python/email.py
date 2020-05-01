@@ -13,12 +13,13 @@ class Email_AWS(object):
     default_sender = 'Datapare <no-reply@datapare.com>'
     CHARSET = "UTF-8"
     fs = filesystem.FileSystemOps()
-    def __init__(self):
+    def __init__(self, db="default_db"):
         config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         self.CHARSET = "UTF-8"
         self.client = boto3.client('ses', aws_access_key_id=config["aws"]["access_key"],
                                    aws_secret_access_key=config["aws"]["secret_key"],
                                     region_name=config["aws"]["default_region"])
+        self.dbo = DbOps(db)
     
     def send_aws(self, receipent, sender,  subject="Datapare Notification", body=""):
         
@@ -75,10 +76,7 @@ class TemplateEngine(object):
         self.TEMPLATES_DIR = os.path.join(self.BASE_DIR, 'email_templates')
 
     def render(self, template_name, params):
-        #email=params["email"]
-        
-        unsubscribe_token = self.get_token(params)
-        
+        unsubscribe_token = self.get_unsubscribe_token(params)
         const = {
             "url_top_logo": "https://dataparestorage.blob.core.windows.net/dp-web-assets/logo_mail.png",
             "url_dashboard": "https://www.datapare.com/login",
@@ -92,42 +90,17 @@ class TemplateEngine(object):
             
         }
         #data = {**const, **params} # Hata aldım. TypeError: 'list' object is not a mapping
-        print(self.TEMPLATES_DIR)
         j2_env = Environment(loader=FileSystemLoader(self.TEMPLATES_DIR), trim_blocks=True)
         j2 = j2_env.get_template(template_name)
-
         self.html = j2.render(const)
         return self.html
     
-    def get_token(self, params):
+    def get_unsubscribe_token(self, params):
         try:
-            email = params["email"]
-            sql = """
-                    select token
-                    from general_user u
-                    inner join general_tokens t on t.user_id = u.id
-                    where t.id = (select max(id) from general_tokens where token_type=4 and user_id=u.id and is_expired=0) and u.email='{0}'
-                  """.format(email)
-            row = DbOps("track_db").execute_sql_return_results(sql)
-            if row:
-                token = row[0][0]
-
-            else:
-                token = uuid.uuid4()
-                sql = """
-                        select id
-                        from general_user
-                        where email='{0}'                      
-                      """.format(email)
-                user_id = DbOps("track_db").execute_sql_return_results(sql)[0][0]
-                sql = """
-                        insert into general_tokens(token, token_type, created_at, expire_at, is_expired, user_id)
-                        values('{0}', 4, now(), now() + interval 10 year, 0, {1})
-                      """.format(token, user_id)
-                MysqlOps().execute_sql(sql)
-            return token
-    
+            user_id = params["user_id"]
+            sql = """call GenerateToken({0}, 1)""".format(user_id)
+            row = self.dbo.execute_sql_return_results(sql)
+            return row[0][0]
         except Exception as e:
-            print(e)
-            pass
+            return None
     
