@@ -60,6 +60,24 @@ RedisHelper.prototype.keys = function (pattern) {
 
 };
 
+RedisHelper.prototype.count = function (queueName) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.client.scard(queueName, function(err, res){
+            if(err) {
+                console.log("[RedisHelper] --- Error Occured: ---"); //TODO: Logging operation gonna add.
+                reject(err);
+            }
+            console.log("[RedisHelper] --- Object counting ---");
+            if (res!==null) {
+                resolve(res);
+            } 
+            
+        });
+    });
+
+};
+
 
 RedisHelper.prototype.order_queues_get_key = function(pattern) {
     var self = this;
