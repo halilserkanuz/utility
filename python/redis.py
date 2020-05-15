@@ -13,7 +13,7 @@ class RedisOps(object):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         host = redis_kwargs.get("host", self.config["redis"]["host"])
         password = redis_kwargs.get("password", self.config["redis"]["password"])
-        self.db = redis.Redis(host=host, password=password)
+        self.db = redis.StrictRedis(host=host, password=password, charset="utf-8", decode_responses=True)
         self.pipe = self.db.pipeline()
 
     def count(self, name):
