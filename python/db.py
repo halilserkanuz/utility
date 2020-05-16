@@ -22,8 +22,8 @@ class DbOps(object):
                 passwd=db_settings["password"], 
                 db=db_settings["db_name"],
                 port=db_settings["port"], 
-                autocommit=True, charset='utf8',
-                use_unicode=True,
+                autocommit=True, 
+                charset='utf8mb4',
                 connect_timeout=315360)
             print("Connected to mysql server")
 

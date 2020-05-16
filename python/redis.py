@@ -13,7 +13,7 @@ class RedisOps(object):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
         host = redis_kwargs.get("host", self.config["redis"]["host"])
         password = redis_kwargs.get("password", self.config["redis"]["password"])
-        self.db = redis.Redis(host=host, password=password)
+        self.db = redis.StrictRedis(host=host, password=password, charset="utf-8", decode_responses=True)
         self.pipe = self.db.pipeline()
 
     def count(self, name):
@@ -45,18 +45,18 @@ class RedisOps(object):
 
     def get_many(self, name, count=0):
         items = self.db.spop(name, count=count)
-        items = [item.decode('utf-8') for item in items]
+        items = [item for item in items]
         return items
 
     def get(self, name):
         result = self.db.spop(name)
         if result:
-            return result.decode('utf-8')
+            return result
         return result
 
     def get_oldest_key_like(self, name):
         key_list = self.get_key_list_like(name)
-        key_list = [key.decode('utf-8') for key in key_list]
+        key_list = [key for key in key_list]
         key_list.sort()
         return key_list[0]
     
