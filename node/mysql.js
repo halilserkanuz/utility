@@ -2,9 +2,11 @@ const mysql = require('mysql');
 
 const config = require('../config.json');
 
-const mySQLConfig = config.default_db;
 
-function MySQLHelper () {
+
+function MySQLHelper (db="default_db") {
+
+    const mySQLConfig = config[db];
     this.con = mysql.createConnection({
         host: mySQLConfig.host,
         port: mySQLConfig.port,
@@ -36,10 +38,11 @@ MySQLHelper.prototype.execute_sql = function (query) {
     return new Promise(function (resolve, reject) {
         self.con.connect(function(err) {
             if (err) return err;
-            
+            console.log('connection established');
             self.con.query(query, function (err, result, fields) {
                 if (err) throw err;
                 self.con.end();
+                console.log('query done');
                 resolve(result);
             });
           });
