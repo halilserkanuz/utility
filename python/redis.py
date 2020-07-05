@@ -46,18 +46,18 @@ class RedisOps(object):
 
     def get_many(self, name, count=0):
         items = self.db.spop(name, count=count)
-        items = [item.decode('utf-8') for item in items]
+        items = [item for item in items]
         return items
 
     def get(self, name):
         result = self.db.spop(name)
         if result:
-            return result.decode('utf-8')
+            return result
         return result
 
     def get_oldest_key_like(self, name):
         key_list = self.get_key_list_like(name)
-        key_list = [key.decode('utf-8') for key in key_list]
+        key_list = [key for key in key_list]
         key_list.sort()
         return key_list[0]
     
