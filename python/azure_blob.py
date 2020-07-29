@@ -5,21 +5,19 @@ __version__ = 'v1.0'
 import json
 from . import filesystem
 import time, os
-from azure.storage.blob import (
-    BlockBlobService,
-    ContainerPermissions,
-)
+from azure.storage.blob import BlobServiceClient
 
 
 class BlobOps(object):
     fs = filesystem.FileSystemOps()
     def __init__(self, storage_account="azure", **kwargs):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
-        self.blob = BlockBlobService(account_name=self.config[storage_account]["storage_account"], account_key=self.config[storage_account]["storage_account_key"]) 
+        self.blob = BlobServiceClient(account_url="https://{account_name}.blob.core.windows.net".format(account_name=self.config[storage_account]["storage_account"]),
+                                        credentials=self.config[storage_account]["storage_account_key"]) 
     
     def create_container(self, container_name):
         self.blob.create_container(container_name) 
-        self.blob.set_container_acl(container_name, public_access=ContainerPermissions.READ)
+        #self.blob.set_container_acl(container_name, public_access=ContainerPermissions.READ)
 
     def upload_file(self, container_name, file_name, full_path):
         self.blob.create_blob_from_path(container_name, file_name, full_path)
