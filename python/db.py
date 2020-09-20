@@ -3,15 +3,14 @@ import  pymysql
 import os
 from . import filesystem
 import os.path
+import psycopg2
 
 class DbOps(object):
 
     fs = filesystem.FileSystemOps()
     def __init__(self, db="default_db"):
         self.config = self.fs.read_json_from_file(os.path.dirname(__file__) + '/../config.json')
-        if self.config[db]["db_type"]=="mysql":
-            self.db_settings = self.config[db]
-            print("Running on mysql server")
+        self.db_settings = self.config[db]
     
     def create_connection(self):
         db_settings = self.db_settings
@@ -25,6 +24,12 @@ class DbOps(object):
                 autocommit=True, 
                 charset='utf8mb4',
                 connect_timeout=315360)
+        elif db_settings["db_type"]=="postgresql":
+            return psycopg2.connect(
+                host=db_settings["host"],
+                database=db_settings["db_name"],
+                user=db_settings["user_name"],
+                password=db_settings["password"])
             print("Connected to mysql server")
 
     def execute_sp(self, spname, parameter, parameterCount):
@@ -39,8 +44,7 @@ class DbOps(object):
                 select_statement = select_statement +"'{0}',".format(parameter[i])
         
         cur.execute(select_statement)
-        
-        
+        cnx.commit()
         cur.close()
         cnx.close()
         
@@ -57,7 +61,7 @@ class DbOps(object):
                 select_statement = select_statement + "%s,"
         cur.execute(select_statement+")", parameter)
         rows = cur.fetchall()
-        
+        cnx.commit()
         cur.close()
         cnx.close()
         return rows
@@ -67,8 +71,11 @@ class DbOps(object):
         cur = cnx.cursor()
         select_statement = sql
         cur.execute(select_statement, ())
+        cnx.commit()
         cur.close()
         cnx.close()
+
+        print("Completed ", sql)
 
 
 
@@ -78,6 +85,7 @@ class DbOps(object):
         select_statement = sql
         cur.execute(select_statement, ())
         rows = cur.fetchall()
+        
         cur.close()
         cnx.close()
         return rows
@@ -100,3 +108,4 @@ class DbOps(object):
             results.get("results").append(res)
 
         return results
+
