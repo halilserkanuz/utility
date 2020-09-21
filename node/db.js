@@ -4,51 +4,44 @@ const { Client } = require('pg');
 const config = require('../config.json');
 
 class DBHelper {
-    constructor(db="default_db"){
-        this.dbConfig = config[db];
-        if (this.dbConfig.db_type =="mysql") {
-            this.con = mysql.createConnection({
-                host: this.dbConfig.host,
-                user: this.dbConfig.user_name,
-                password: this.dbConfig.password,
-                database: this.dbConfig.db_name
-              });
-        } else if (this.dbConfig.db_type =="postgresql") {
-            this.con = new Client({
-                host: this.dbConfig.host,
-                user: this.dbConfig.user_name,
-                password: this.dbConfig.password,
-                database: this.dbConfig.db_name,
-                port: this.dbConfig.port
-            });
-            console.log(this.dbConfig);
-        }
-        
-    }
+   
 
     async executeSql(query){
-        var self = this;
         
         return new Promise(async (resolve, reject) => {
-            
-            if (this.dbConfig.db_type =="mysql") {
+            let dbConfig = config["pricetracker_db"];
+            if (dbConfig.db_type =="mysql") {
+                let con = mysql.createConnection({
+                    host: dbConfig.host,
+                    user: dbConfig.user_name,
+                    password: dbConfig.password,
+                    database: dbConfig.db_name
+                });
                 await this.con.query(query, (err,res) => {
                     if(err) {
                         throw err;
                     }
                     resolve(res);
                 });
-           } else if (this.dbConfig.db_type =="postgresql") {
-               await this.con.connect();
-                await this.con.query(query)
+            } else if (dbConfig.db_type =="postgresql") {
+                let con = new Client({
+                    host: dbConfig.host,
+                    user: dbConfig.user_name,
+                    password: dbConfig.password,
+                    database: dbConfig.db_name,
+                    port: dbConfig.port
+                });
+                await con.connect();
+                await con.query(query)
                 .then(res => {
-                    this.con.end();
+                    con.end();
                     resolve(res.rows);
                 })
                 .catch(e=>{
                     console.log(e.stack)
                 })
-           }
+            }
+           
            
         });
     }
