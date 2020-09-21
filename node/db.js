@@ -22,7 +22,6 @@ class DBHelper {
                 port: this.dbConfig.port
             });
             console.log(this.dbConfig);
-            this.con.connect();
         }
         
     }
@@ -53,8 +52,10 @@ class DBHelper {
                     resolve(res);
                 });
            } else if (this.dbConfig.db_type =="postgresql") {
+               await this.con.connect();
                 await this.con.query(query)
                 .then(res => {
+                    this.con.end();
                     resolve(res.rows);
                 })
                 .catch(e=>{
