@@ -30,20 +30,7 @@ class DBHelper {
         var self = this;
         
         return new Promise(async (resolve, reject) => {
-            /*
-            await this.con.query(query, (err,res) => {
-                if(err) {
-                    throw err;
-                }
-                if (this.dbConfig.db_type =="mysql") {
-                    resolve(res);
-                } else if (this.dbConfig.db_type =="postgresql") {
-                    //this.con.end();
-                    resolve(res.rows);
-                }
-                
-            });
-            */
+            
             if (this.dbConfig.db_type =="mysql") {
                 await this.con.query(query, (err,res) => {
                     if(err) {
