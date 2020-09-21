@@ -22,16 +22,18 @@ class DBHelper {
                 port: this.dbConfig.port
             });
             console.log(this.dbConfig);
-            this.con.connect();
+            
         }
         
     }
 
     async executeSql(query){
         var self = this;
+        this.con.connect();
         return new Promise(async (resolve, reject) => {
             await this.con.query(query, (err,res) => {
                 if(err) {
+                    this.con.end();
                     throw err;
                 }
                 if (this.dbConfig.db_type =="mysql") {
