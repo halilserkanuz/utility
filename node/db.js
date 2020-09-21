@@ -37,6 +37,7 @@ class DBHelper {
                 if (this.dbConfig.db_type =="mysql") {
                     resolve(res);
                 } else if (this.dbConfig.db_type =="postgresql") {
+                    this.con.end();
                     resolve(res.rows);
                 }
                 
