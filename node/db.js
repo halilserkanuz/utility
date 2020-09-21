@@ -22,28 +22,46 @@ class DBHelper {
                 port: this.dbConfig.port
             });
             console.log(this.dbConfig);
-            
+            this.con.connect();
         }
         
     }
 
     async executeSql(query){
         var self = this;
-        this.con.connect();
+        
         return new Promise(async (resolve, reject) => {
+            /*
             await this.con.query(query, (err,res) => {
                 if(err) {
-                    this.con.end();
                     throw err;
                 }
                 if (this.dbConfig.db_type =="mysql") {
                     resolve(res);
                 } else if (this.dbConfig.db_type =="postgresql") {
-                    this.con.end();
+                    //this.con.end();
                     resolve(res.rows);
                 }
                 
             });
+            */
+            if (this.dbConfig.db_type =="mysql") {
+                await this.con.query(query, (err,res) => {
+                    if(err) {
+                        throw err;
+                    }
+                    resolve(res);
+                });
+           } else if (this.dbConfig.db_type =="postgresql") {
+                await this.con.query(query)
+                .then(res => {
+                    resolve(res.rows);
+                })
+                .catch(e=>{
+                    console.log(e.stack)
+                })
+           }
+           
         });
     }
 }
