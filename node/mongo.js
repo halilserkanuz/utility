@@ -12,7 +12,7 @@ class MongoHelper {
             const collection = await db.collection(col);
             await collection.insertMany(docs, function(err, result) {
                 if(err) reject(err);
-                console.log("####################################### document inserted into the collection");
+                console.log("document inserted into the collection");
                 client.close();
                 resolve(result)
             });
