@@ -25,11 +25,13 @@ class DbOps(object):
                 charset='utf8mb4',
                 connect_timeout=315360)
         elif db_settings["db_type"]=="postgresql":
-            return psycopg2.connect(
+            con = psycopg2.connect(
                 host=db_settings["host"],
                 database=db_settings["db_name"],
                 user=db_settings["user_name"],
                 password=db_settings["password"])
+            con.autocommit = True
+            return con
             print("Connected to mysql server")
 
     def execute_sp(self, spname, parameter, parameterCount):
