@@ -72,14 +72,12 @@ class DbOps(object):
         cnx = self.create_connection()
         cur = cnx.cursor()
         select_statement = sql
-        cur.execute(select_statement, ())
+        cur.execute(select_statement)
         cnx.commit()
         cur.close()
         cnx.close()
 
         print("Completed ", sql)
-
-
 
     def execute_sql_return_results(self, sql):
         cnx = self.create_connection()
