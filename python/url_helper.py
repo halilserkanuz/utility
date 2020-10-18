@@ -13,7 +13,6 @@ class URLHelper(object):
             return 'http://{url}'.format(url=url)
         return url
 
-
     def parse(self, url):
         url = self.convert(url)
         url = self.replace(url)
@@ -39,8 +38,6 @@ class URLHelper(object):
         self.parsed_url["subdomain"] = None if splitted_domain.subdomain == '' else splitted_domain.subdomain
         self.parsed_url["domain"] = splitted_domain.registered_domain
 
-
-
     def __parse_path(self):
         if self.parsed_url["paths"].endswith('/'):
             self.parsed_url["paths"] = self.parsed_url["paths"][:-1]
@@ -52,7 +49,7 @@ class URLHelper(object):
 
     def replace(self, url):
         return url.replace('\r', '').replace('\t', '').replace('\n', '').strip()
-    
+
     def check_permission(self, forbidden):
         """
         TODO: To check a url has a permission to be crawled depends on query paramater or a text.
