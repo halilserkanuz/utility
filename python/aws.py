@@ -20,4 +20,17 @@ class AWSOps(object):
             MaxSize=capacity,
             DesiredCapacity=capacity
         )
+    
+    def upload_string_to_s3(self, string, bucket_name, file_name):
+        client = boto3.client('s3', 
+            aws_access_key_id=self.config["aws"]["access_key"], 
+            aws_secret_access_key=self.config["aws"]["secret_key"],
+            region_name=self.config["aws"]["default_region"])
+        
+        try:
+            client.Object(bucket_name, file_name).put(Body=string)
+        except ClientError as e:
+            logging.error(e)
+            return False
+        return True
         
