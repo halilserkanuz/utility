@@ -43,8 +43,31 @@ class URLHelper(object):
             self.parsed_url["paths"] = self.parsed_url["paths"][:-1]
         elif self.parsed_url["paths"].startswith('/'):
             self.parsed_url["paths"] = self.parsed_url["paths"][1:]
-
-        self.parsed_url["paths"]= self.parsed_url["paths"].split('/')
+        try:
+            path1 = self.parsed_url["paths"].split('/')[0]
+        except:
+            path1 = None
+        try:
+            path2 = self.parsed_url["paths"].split('/')[1]
+        except:
+            path2 = None
+        try:
+            path3 = self.parsed_url["paths"].split('/')[2]
+        except:
+            path3 = None
+        try:
+            path4 = self.parsed_url["paths"].split('/')[3]
+        except:
+            path4 = None
+        try:
+            path5 = self.parsed_url["paths"].split('/')[4]
+        except:
+            path5 = None
+        try:
+            path6 = self.parsed_url["paths"].split('/')[5]
+        except:
+            path6 = None
+        self.parsed_url["paths"]= [path1, path2, path3, path4, path5, path6]
 
 
     def replace(self, url):
