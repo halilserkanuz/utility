@@ -68,16 +68,21 @@ class DbOps(object):
         cnx.close()
         return rows
 
-    def execute_sql(self, sql):
+    def execute_sql(self, sql, params=None):
         cnx = self.create_connection()
         cur = cnx.cursor()
         select_statement = sql
-        cur.execute(select_statement)
+        if params:
+            cur.execute(sql, params)
+        else:
+            cur.execute(select_statement)
         cnx.commit()
         cur.close()
         cnx.close()
 
         print("Completed ", sql)
+    
+    
 
     def execute_sql_return_results(self, sql):
         cnx = self.create_connection()
