@@ -60,4 +60,6 @@ class RedisOps(object):
         key_list.sort()
         return key_list[0]
     
+    def get_key_memory_usage(self, name):
+        return self.db.memory_usage(name)
     
