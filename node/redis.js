@@ -27,6 +27,45 @@ RedisHelper.prototype.pop = function (queue, count=1) {
 
 };
 
+RedisHelper.prototype.blpop = function (queues) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.client.blpop(key=queue, function(err, res){
+            if(err) {
+                console.log("[RedisHelper] --- Error Occured: ---"); //TODO: Logging operation gonna add.
+                reject(err);
+            }
+            console.log("[RedisHelper] --- Object getting ---");
+            if (res!==null) {
+                resolve(res);
+            } else {
+                throw `[RedisHelper] --- No object within ${queue} ---`
+            }
+            
+        });
+    });
+
+};
+
+RedisHelper.prototype.rpush = function (queue_name, data) {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.client.rpush(queue_name, data, function(err, res){
+            if(err) {
+                console.log("[RedisHelper] --- Error Occured: ---"); //TODO: Logging operation gonna add.
+                reject(err);
+            }
+            console.log("[RedisHelper] --- Object getting ---");
+            if (res!==null) {
+                resolve(res);
+            } else {
+                throw `[RedisHelper] --- No object within ${queue} ---`
+            }
+        });
+    });
+
+};
+
 RedisHelper.prototype.add = function (queue, str) {
     var self = this;
     return new Promise(function (resolve, reject) {
