@@ -76,3 +76,6 @@ class RedisOps(object):
         if type(item) is dict:
             item = json.dumps(item)
         return self.db.rpush(key, item)
+    
+    def set_expire(self, key, second):
+        self.db.expire(key, second);
