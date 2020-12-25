@@ -10,7 +10,7 @@ from . import filesystem
 
 
 class Email_AWS(object):
-    default_sender = 'Datapare <no-reply@datapare.com>'
+    default_sender = 'Datapare <info@datapare.com>'
     CHARSET = "UTF-8"
     fs = filesystem.FileSystemOps()
     def __init__(self, db="default_db"):
@@ -50,6 +50,8 @@ class Email_AWS(object):
         template_name = obj["email_template"]
         te = TemplateEngine()
         body = te.render(template_name, obj)
+        print(obj)
+        print(body)
         response = self.client.send_email(
             Destination={
                 'ToAddresses': email.split(',')
@@ -68,6 +70,7 @@ class Email_AWS(object):
             },
             Source=sender,
         )
+        print(response)
 
 
 class TemplateEngine(object):
