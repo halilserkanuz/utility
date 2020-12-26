@@ -43,7 +43,7 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
             try{
                 switch(step["type"]){
                     case "waitForSelector":
-                        await page.waitFor(step["selector"]);
+                        await page.waitForTimeout(step["selector"]);
                         
                         break;
                     case "click":
@@ -88,7 +88,7 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         },selector, order, attribute, value);
                         break;
                     case "waitFor":
-                        await page.waitFor(step["second"]);
+                        await page.waitForTimeout(step["second"]);
                         break;
                     case "tap":
                             await page.tap(step["selector"]);
