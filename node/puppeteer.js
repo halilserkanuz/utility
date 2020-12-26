@@ -20,7 +20,6 @@ PuppeteerHelper.prototype.getFileHash = (filename)=> {
 
 PuppeteerHelper.prototype.compareImages = (newImage, oldImage) => {
     return new Promise(async function(resolve, reject){
-        
         const options = {};
         await resemble.compare(newImage, oldImage, options, function(err, data) {
             if(err) reject(err)

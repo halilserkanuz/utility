@@ -20,13 +20,13 @@ AzureHelper.prototype.uploadFile = function (container, blobName, localPath) {
     return new Promise(function (resolve, reject) {
         console.log('promise created')
         self.blobSvc.createBlockBlobFromLocalFile(container, blobName, localPath, (err, result) => {
-            console.log(container, blobName, localPath)
             if(err!==null){
                 console.log('[Azure Helper] --- Failed to upload to BlobService:', err);
                 reject(err, container, blobName, localPath);
             }
+            resolve('[Azure Helper] --- Successfully uploaded to BlobService');
         });
-        resolve('[Azure Helper] --- Successfully uploaded to BlobService');
+        
     })
 
 };
