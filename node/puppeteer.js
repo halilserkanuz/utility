@@ -39,6 +39,7 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
         var result = {};
         for (var j=0; j<steps.length; j++){
             var step = steps[j];
+            console.log(step);
             try{
                 switch(step["type"]){
                     case "waitForSelector":
@@ -187,7 +188,7 @@ PuppeteerHelper.prototype.processSteps = function (page, steps, customs) {
                         };
                 }
             }catch(err){
-                await reject(undefined);
+                console.log(err);
             }
         }
     await resolve(result);
