@@ -4,6 +4,8 @@ import os
 from . import filesystem
 import os.path
 import psycopg2
+import psycopg2.extras
+import json
 
 class DbOps(object):
 
@@ -114,3 +116,11 @@ class DbOps(object):
 
         return results
 
+    def query(self, query, dictCursor=True):
+        cnx = self.create_connection()
+        cur = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(query)
+        rows = cur.fetchall()
+        cur.close()
+        cnx.close()
+        return json.loads(json.dumps(rows))
