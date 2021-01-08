@@ -44,8 +44,8 @@ class Email_AWS(object):
 
     def send(self, obj):
         email = obj["email"]
-        sender = "info@datapare.com"
-        subject="Datapare Notification"
+        sender = obj.get("sender", "info@datapare.com")
+        subject=obj.get("subject", "Datapare Notification")
         params = obj["items"]
         template_name = obj["email_template"]
         te = TemplateEngine()
