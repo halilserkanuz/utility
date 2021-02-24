@@ -1,12 +1,50 @@
-# -*- coding: utf-8 -*-
-import  pymysql
+
 import os
-from . import filesystem
-import os.path
 import psycopg2
 import psycopg2.extras
-import json
+from typing import Dict, Tuple
 
+
+class DBHelper(object):
+
+    def create_connection(self):
+        cnx = psycopg2.connect(
+                        host=os.getenv("PG_HOST"),
+                        database=os.getenv("PG_DB"),
+                        user=os.getenv("PG_USER"),
+                        password=os.getenv("PG_PASSWORD")
+                    )
+
+        cnx.autocommit = True
+        return cnx
+
+    
+    def fetch(self, query: str) -> Dict:
+        cnx = self.create_connection()
+        cur = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(query)
+        rows = cur.fetchall()
+        cur.close()
+        cnx.close()
+        return rows
+
+    def insert(self, query: str, data: Tuple) -> None:
+        cnx = self.create_connection()
+        cur = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(query, data)
+        cur.close()
+        cnx.close()
+
+    def query(self, query: str) -> None:
+        cnx = self.create_connection()
+        cur = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(query)
+        cur.close()
+        cnx.close()
+    
+
+
+"""
 class DbOps(object):
 
     fs = filesystem.FileSystemOps()
@@ -16,25 +54,13 @@ class DbOps(object):
     
     def create_connection(self):
         db_settings = self.db_settings
-        if db_settings["db_type"]=="mysql":
-            return pymysql.connect(
-                host=db_settings["host"], 
-                user=db_settings["user_name"], 
-                passwd=db_settings["password"], 
-                db=db_settings["db_name"],
-                port=db_settings["port"], 
-                autocommit=True, 
-                charset='utf8mb4',
-                connect_timeout=315360)
-        elif db_settings["db_type"]=="postgresql":
-            con = psycopg2.connect(
-                host=db_settings["host"],
-                database=db_settings["db_name"],
-                user=db_settings["user_name"],
-                password=db_settings["password"])
-            con.autocommit = True
-            return con
-            print("Connected to mysql server")
+        con = psycopg2.connect(
+            host=db_settings["host"],
+            database=db_settings["db_name"],
+            user=db_settings["user_name"],
+            password=db_settings["password"])
+        con.autocommit = True
+        return con
 
     def execute_sp(self, spname, parameter, parameterCount):
         print("SP Name: ",spname)
@@ -115,12 +141,4 @@ class DbOps(object):
             results.get("results").append(res)
 
         return results
-
-    def query(self, query, dictCursor=True):
-        cnx = self.create_connection()
-        cur = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(query)
-        rows = cur.fetchall()
-        cur.close()
-        cnx.close()
-        return json.loads(json.dumps(rows))
+"""
