@@ -31,6 +31,14 @@ class RedisHelper(object):
     def rpush(self, key_name: Text, item: str) -> Text:
         """Pushing element to the right side of the list."""
         return self.client.rpush(key_name, item)
+    
+    def lpush(self, key_name: Text, item: str) -> Text:
+        """Pushing element to the right side of the list."""
+        return self.client.lpush(key_name, item)
+
+    def rpop(self, key_name: Text) -> Text:
+        """Popping element from the left side of the list."""
+        return self.client.rpop(key_name)
 
     def lpop(self, key_name: Text) -> Text:
         """Popping element from the left side of the list."""
