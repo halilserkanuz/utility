@@ -7,14 +7,16 @@ from typing import Dict, Tuple
 
 class DBHelper(object):
 
+    def __init__(self, db_name="TRACK"):
+        self.db_name = db_name
+
     def create_connection(self):
         cnx = psycopg2.connect(
                         host=os.getenv("PG_HOST"),
-                        database=os.getenv("PG_DB"),
-                        user=os.getenv("PG_USER"),
-                        password=os.getenv("PG_PASSWORD")
+                        database=os.getenv("PG_DB_" + self.db_name),
+                        user=os.getenv("PG_USER_" + self.db_name),
+                        password=os.getenv("PG_PASSWORD_" + self.db_name)
                     )
-
         cnx.autocommit = True
         return cnx
 
@@ -41,6 +43,8 @@ class DBHelper(object):
         cur.execute(query)
         cur.close()
         cnx.close()
+
+
     
 
 
