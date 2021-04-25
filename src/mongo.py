@@ -20,5 +20,4 @@ class MongoHelper(object):
     def query(self,  collection: str, query_filter: dict={}) -> None:
         db = self.create_client()
         _collection = db[collection]
-        print(query_filter)
         return list(_collection.find(query_filter))
