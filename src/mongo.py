@@ -17,7 +17,8 @@ class MongoHelper(object):
         _collection = db[collection]
         _collection.insert_one(data)
 
-    def query(self,  collection: str, data: dict) -> None:
+    def query(self,  collection: str, query_filter: dict={}) -> None:
         db = self.create_client()
         _collection = db[collection]
-        return _collection.find(data)
+        print(query_filter)
+        return list(_collection.find(query_filter))

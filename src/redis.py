@@ -18,15 +18,22 @@ class RedisHelper(object):
     
     def count(self, key_name: Text):
         """Get item count in list"""
-        return self.db.scard(key_name)
+        return self.client.scard(key_name)
 
-    def get(self, key_name: Text, count: int = 0) -> str:
+    def get(self, key_name: Text, count: int = 1) -> str:
         """Popping random element from list"""
-        return self.client.spop(key_name)
+        return self.client.spop(key_name, count=count)
 
     def put(self, key_name: Text, item: str) -> None:
         """Putting element to list"""
         self.client.sadd(key_name, item)
+    
+    def put_many(self, key_name: Text, items: List[str]) -> None:
+        """Put many items to the list"""
+        with self.create_pipeline() as pipe:
+            for item in items:
+                pipe.sadd(key_name, item)
+            pipe.execute()
 
     def rpush(self, key_name: Text, item: str) -> Text:
         """Pushing element to the right side of the list."""
