@@ -30,7 +30,7 @@ class DBHelper(object):
         cnx.close()
         return rows
 
-    def insert(self, query: str, data: Tuple) -> None:
+    def execute(self, query: str, data: Tuple) -> None:
         cnx = self.create_connection()
         cur = cnx.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cur.execute(query, data)
