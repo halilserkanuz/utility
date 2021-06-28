@@ -51,6 +51,9 @@ class RedisHelper(object):
         """Popping element from the left side of the list."""
         return self.client.lpop(key_name)
     
+    def lcount(self, key_name: Text) -> Text:
+        return self.client.llen(key_name)
+    
     def search_keys(self,  search_expression) -> List:
         """Search keys with search expression"""
         return self.client.keys(search_expression)
